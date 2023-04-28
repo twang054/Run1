@@ -1,0 +1,31 @@
+import pygame    
+
+pygame.init()    
+size = (1280,720)
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption('Run')  
+# Image can be changed as needed
+image = pygame.image.load("run_background.webp")
+while True: # Infinite Loop
+    screen.fill((255,255,255))  
+    screen.blit(image,(0, 0))
+    # One event at a time
+    event = pygame.event.wait()  
+    # Makes it possible to quit the game by clicking close
+    if event.type == pygame.QUIT:
+        pygame.quit() 
+    # Checks Key Pressed, both press and release   
+    if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+        key_pressed = pygame.key.get_pressed()
+        if key_pressed[pygame.K_LEFT]:
+            pygame.draw.rect(screen, (255,255,255), pygame.Rect(60, 60, 60, 60))
+        elif key_pressed[pygame.K_RIGHT]:
+            pygame.draw.rect(screen, (0,255,0), pygame.Rect(60, 60, 60, 60))
+            # Need to setup specific interactions
+        elif key_pressed[pygame.K_UP]:
+            pygame.draw.rect(screen, (0,255,255), pygame.Rect(60, 60, 60, 200))
+        elif key_pressed[pygame.K_DOWN]:
+            pygame.draw.rect(screen, (255,255,0), pygame.Rect(60, 60, 60, 200))
+        elif key_pressed[pygame.K_SPACE]:
+            pygame.draw.rect(screen, (255,0,0), pygame.Rect(60, 60, 60, 200))
+    pygame.display.flip()
