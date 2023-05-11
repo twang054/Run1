@@ -1,4 +1,5 @@
 import pygame
+
 sprite_size = (100,100)
 horizontal_acceleration = 5
 ground_y = 600
@@ -6,14 +7,15 @@ velocity_cap = 15
 class Player(pygame.sprite.Sprite):  
     def __init__(self):  
         pygame.sprite.Sprite.__init__(self)  
-        self.image = pygame.Surface(sprite_size)  # Sets the size of the sprite
-        self.image.fill((255, 0, 255))  # Sets the color of the sprite
-        self.rect = self.image.get_rect()  
+        self.image = pygame.image.load("blob.png")
+        self.image = pygame.transform.scale(self.image, (100,100))
+        self.rect = self.image.get_rect()
         self.LEFT_KEY, self.RIGHT_KEY= False, False
         self.is_jumping, self.on_ground, self.friction = False, True, False
-        self.gravity, self.friction = .35, -.12
+        self.gravity, self.friction = .5, -.12
         self.position, self.velocity = pygame.math.Vector2(0,0), pygame.math.Vector2(0,0)
         self.acceleration = pygame.math.Vector2(0,self.gravity)
+        
     
     def draw(self, display):
         display.blit(self.image, (self.rect.x, self.rect.y))
