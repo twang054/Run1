@@ -1,10 +1,12 @@
 import pygame  
 import sys  
+from tiles import TileMap
 
 from player import Player
 from wall import Wall
 
 pygame.init()  
+
 # Initializations
 clock = pygame.time.Clock()  
 running = True
@@ -12,12 +14,16 @@ fps = 60
 background = [255, 255, 255]
 pygame.display.set_caption('Run')  
 image = pygame.image.load("run_background.webp")  
-size =[1280, 720]  
+size =[800, 600]  
 screen = pygame.display.set_mode(size)  
 
 # Load Player
 player = Player()
 player.position.x, player.position.y = 640, 500
+
+# Map Setup
+map = TileMap('level1..csv', spritesheet)
+player.rect.x, player.rect.y = map.start_x, map.start_y
 
 # Define keys for player movement  
 player.move = [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_SPACE]  
@@ -61,9 +67,9 @@ while running:
     screen.fill(background)
     screen.blit(image,(0, 0))  
     player.draw(screen)
-    # first parameter takes a single sprite  
-    # second parameter takes sprite groups  
-    # third parameter is a kill command if true  
+
+    map.draw_map(screen)
+
     hit = pygame.sprite.spritecollide(player, wall_group, True)  
     if hit:  
     # if collision is detected call a function to destroy  
