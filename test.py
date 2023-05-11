@@ -1,6 +1,7 @@
-# Import pygame and random modules
+# Import pygame, os, and random modules
 import pygame
 import random
+import os
 
 # Initialize pygame and create a window
 pygame.init()
@@ -13,6 +14,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+FONT = pygame.font.SysFont("Times New Roman", 32)
 
 # Create the Player class
 class Player(pygame.sprite.Sprite):
@@ -21,8 +23,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # Set the image and rect attributes
-        self.image = pygame.Surface((50, 50))
-        self.image.fill(BLUE)
+        self.image = pygame.image.load(os.path.join("images", "avatar.png"))
+        self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()
 
         # Set the initial position and velocity
