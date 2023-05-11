@@ -1,8 +1,7 @@
 import pygame  
 import sys  
-from tiles import TileMap
-
-from button import Button
+from tiles import *
+from Menu.button import Button
 from player import Player
 from wall import Wall
 from spritesheet import Spritesheet
@@ -55,37 +54,37 @@ def game():
 
     # Initializations
     clock = pygame.time.Clock()  
-    running = True
     fps = 60  
+    
     background = [255, 255, 255]
     pygame.display.set_caption('Run')  
-    image = pygame.image.load("run_background.webp")  
-    size =[800, 600]  
-    screen = pygame.display.set_mode(size)  
+    image = pygame.image.load("run_background.webp")
+    
+    display_w, display_h = 800, 600
+    canvas = pygame.Surface((display_w, display_w))
+    screen = pygame.display.set_mode(((display_w, display_h)))
+    running = True  
 
-    # Load Player
+    # Load Player and Spritesheet
     player = Player()
-    player.position.x, player.position.y = 640, 500
+    spritesheet = Spritesheet('spritesheet1.png')
+    blobby = spritesheet.get_sprite(0,0,64,64)
+    block = spritesheet.get_sprite(64,0,64,64)
+    chain = spritesheet.get_sprite(128,0,64,64)
+    hang_spike = spritesheet.get_sprite(192,0,64,64)
+    spike = spritesheet.get_sprite(256,0,64,64)
 
-    # Map Setup
-    map = TileMap('level1..csv', Spritesheet
-                )
+    # Load Map 
+    map = TileMap('LEVEL1.csv', Spritesheet)
     player.rect.x, player.rect.y = map.start_x, map.start_y
 
     # Define keys for player movement  
     player.move = [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_SPACE]  
-    player
-
-    wall = Wall([100,100])  # The other sprites
-
-    wall_group = pygame.sprite.Group()  # This is how we do collision detections. We'll have to group a bunch of walls
-    wall_group.add(wall)  # We'll also have to make another class for walls
-
-    player_group = pygame.sprite.Group()  
-    player_group.add(player)  
 
     while running:  
         dt = clock.tick(60) * .001 * fps
+        
+        # Player Inputs
         for event in pygame.event.get():  # Allows quitting with the red button
             if event.type == pygame.QUIT:  
                 running = False 
@@ -111,19 +110,16 @@ def game():
         player.update(dt)
 
         # Update Screen
-        screen.fill(background)
-        screen.blit(image,(0, 0))  
-        player.draw(screen)
+        canvas.fill(background)
+        canvas.blit(image,(0, 0))  
+        
+        player.draw(canvas)
+        
+        map.draw_map(canvas)
+        canvas.blit(player.image, player.rect)
+        screen.blit(canvas, (0,0))
 
-        map.draw_map(screen)
-
-        hit = pygame.sprite.spritecollide(player, wall_group, True)  
-        if hit:  
-        # if collision is detected call a function to destroy  
-            # rect  
-            player.image.fill((255, 255, 255))  
-        player_group.draw(screen)  
-        wall_group.draw(screen)  
+ 
         pygame.display.update()  
         clock.tick(fps)  
     pygame.quit()  

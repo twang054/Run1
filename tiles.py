@@ -1,7 +1,7 @@
 import pygame, csv, os
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, image,x,y):
+    def __init__(self, image,x,y,spritesheet):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
@@ -27,7 +27,7 @@ class TileMap():
         for tile in self.tiles:
             tile.draw(self.map_surface)
 
-    def read_scv(self, filename):
+    def read_csv(self, filename):
         map = []
         with open(os.path.join(filename)) as data:
             data = csv.reader(data,delimiter=',')
@@ -45,9 +45,13 @@ class TileMap():
                 if tile == '0':
                     self.start_x, self.start_y = x * self.tile_size, y * self.tile_size
                 elif tile == '1':
-                    tiles.append(Tile('grass.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
-                elif tile == '2': ## Substitute filenames
-                    tiles.append(Tile('grass2.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
+                    tiles.append(Tile('block.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
+                elif tile == '2':
+                    tiles.append(Tile('chain.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
+                elif tile == '3': ## Substitute filenames
+                    tiles.append(Tile('hang_spike.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
+                elif tile == '4': ## Substitute filenames
+                    tiles.append(Tile('spike.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
                 x += 1
             y += 1
         self.map_w, self.map_h = x * self.tile_size, y * self.tile_size
