@@ -60,7 +60,7 @@ def game():
     pygame.display.set_caption('Run')  
     image = pygame.image.load("run_background.webp")
     
-    display_w, display_h = 800, 600
+    display_w, display_h = 1280, 800
     canvas = pygame.Surface((display_w, display_w))
     screen = pygame.display.set_mode(((display_w, display_h)))
     running = True  

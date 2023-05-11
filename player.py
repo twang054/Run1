@@ -2,7 +2,6 @@ import pygame
 from spritesheet import Spritesheet
 
 spritesheet = Spritesheet('spritesheet1.png')
-sprite_size = (100,100)
 horizontal_acceleration = 5
 ground_y = 600
 velocity_cap = 15
@@ -10,7 +9,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):  
         pygame.sprite.Sprite.__init__(self)  
         self.image = spritesheet.get_sprite(0,0,64,64)
-        self.image = pygame.transform.scale(self.image, (100,100))
+        self.image = pygame.transform.scale(self.image, (50,50))
         self.rect = self.image.get_rect()
         self.LEFT_KEY, self.RIGHT_KEY= False, False
         self.is_jumping, self.on_ground, self.friction = False, True, False
