@@ -23,7 +23,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # Set the image and rect attributes
-        self.image = pygame.image.load(os.path.join("images", "avatar.png"))
+        self.image = pygame.image.load(os.path.join("avatar.png"))
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()
 
