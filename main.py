@@ -60,7 +60,7 @@ def game():
     
     pygame.display.set_caption('Run')  
     image = pygame.image.load("run_background.webp")
-    new_bg = pygame.image.load("level1.png").convert()
+    new_bg = pygame.image.load("level1.4.png").convert()
 
     display_w, display_h = 1000, 800
     canvas = pygame.Surface((display_w, display_w))
@@ -78,9 +78,9 @@ def game():
     spritesheet = Spritesheet('spritesheet1.png')
 
     # Load Map 
-    map = TileMap('LEVEL1.2.csv', spritesheet)
-    map1 = KillerMap('LEVEL1.2.csv', spritesheet)
-    map2 = ChainMap('Level1.2.csv', spritesheet)
+    map = TileMap('level1.4.csv', spritesheet)
+    map1 = KillerMap('level1.4.csv', spritesheet)
+    map2 = ChainMap('level1.4.csv', spritesheet)
     player.rect.x, player.rect.y = map.start_x, map.start_y
 
 

@@ -60,9 +60,7 @@ class TileMap():
         for row in map:
             x = 0
             for tile in row:
-                if tile == '0':
-                    self.start_x, self.start_y = x * self.tile_size, y * self.tile_size
-                elif tile == '1':
+                if tile == '1':
                     tiles.append(Tile('block.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
                 
                 x += 1
