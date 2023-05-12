@@ -1,11 +1,48 @@
 import pygame
 from spritesheet import Spritesheet
 import sys
+from Menu.button import Button
 
 spritesheet = Spritesheet('spritesheet1.png')
 horizontal_acceleration = 5
 ground_y = 1440
 velocity_cap = 15
+
+def get_font(size): # Returns Press-Start-2P in the desired size
+    return pygame.font.Font("assets/font.ttf", size)
+
+def death():
+    pygame.init()
+    SCREEN = pygame.display.set_mode((1280, 720))
+    pygame.display.set_caption("RUN!")
+    BG = pygame.image.load("assets/Background.png")
+    while True:
+        SCREEN.blit(BG, (0, 0))
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        MENU_TEXT = get_font(100).render("GAME OVER", True, "#b68f40")
+        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+
+        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 500), 
+                            text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+
+        SCREEN.blit(MENU_TEXT, MENU_RECT)
+
+        for button in [QUIT_BUTTON]:
+            button.changeColor(MENU_MOUSE_POS)
+            button.update(SCREEN)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
+        pygame.display.update()
+
 class Player(pygame.sprite.Sprite):  
     def __init__(self):  
         pygame.sprite.Sprite.__init__(self)  
@@ -85,10 +122,10 @@ class Player(pygame.sprite.Sprite):
                 self.rect.x = self.position.x
         for killer in kills:
             if self.velocity.x > 0:
-                sys.exit()
+                death()
             elif self.velocity.x < 0:
-                sys.exit()
-
+                death()
+                
     def checkCollisionsy(self, tiles, killers):
         self.on_ground = False
         self.rect.bottom += 1
@@ -107,6 +144,6 @@ class Player(pygame.sprite.Sprite):
                 self.rect.bottom = self.position.y
         for killer in kills:
             if self.velocity.y > 0:
-                sys.exit()
+                death()
             elif self.velocity.y < 0:
-                sys.exit()
+                death()
