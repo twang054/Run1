@@ -28,6 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.checkCollisionsx(tiles)
         self.vertical_movement(dt)
         self.checkCollisionsy(tiles)
+
     
     def horizontal_movement(self, dt):
         self.acceleration.x = 0
@@ -39,6 +40,8 @@ class Player(pygame.sprite.Sprite):
         self.velocity.x += self.acceleration.x * dt
         self.position.x += self.velocity.x * dt + (self.acceleration.x * .5) * (dt * dt)
         self.rect.x = self.position.x
+        if self.rect.x < 0:
+            self.rect.x = 0
 
     def vertical_movement(self,dt):
         self.velocity.y += self.acceleration.y * dt
@@ -66,7 +69,7 @@ class Player(pygame.sprite.Sprite):
     def checkCollisionsx(self, tiles):
         collisions = self.get_hits(tiles)
         for tile in collisions:
-            if tile == '' > 0:  # Hit tile moving right
+            if self.velocity.x > 0:  # Hit tile moving right
                 self.position.x = tile.rect.left - self.rect.w
                 self.rect.x = self.position.x
             elif self.velocity.x < 0:  # Hit tile moving left

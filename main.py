@@ -11,8 +11,9 @@ pygame.init()
 
 SCREEN = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("RUN!")
-
 BG = pygame.image.load("assets/Background.png")
+FONT = pygame.font.SysFont("Times New Roman", 32)
+BLACK = (0, 0, 0)
 
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pygame.font.Font("assets/font.ttf", size)
@@ -47,12 +48,11 @@ def main_menu():
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
-
         pygame.display.update()
 
 def game():
     pygame.init()  
-    game_over = False
+
     # Initializations
     clock = pygame.time.Clock()  
     fps = 60  
@@ -119,15 +119,17 @@ def game():
                     if player.is_jumping:
                         player.velocity.y *= .25 # quarters upwards velocity when space is let go
                         player.is_jumping = False
-        if not game_over:       
-        # Update Sprite
-            player.update(dt, map.tiles)
-            camera.scroll()
 
-        canvas.blit(new_bg, (0 - camera.offset.x, 0 - camera.offset.y))
-        canvas.blit(player.image, (player.rect.x - camera.offset.x, player.rect.y - camera.offset.y))
-        screen.blit(canvas, (0,0))
+       
         
+        # Update Sprite
+        player.update(dt, map.tiles)
+        camera.scroll()
+
+        canvas.blit(new_bg, (0 - camera.offset.x, 0))
+        canvas.blit(player.image, (player.rect.x - camera.offset.x, player.rect.y))
+        screen.blit(canvas, (0,0))
+
         # Update Screen
         # canvas.fill(background)
         # canvas.blit(image,(0, 0))  

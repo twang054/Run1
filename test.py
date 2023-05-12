@@ -26,6 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load(os.path.join("avatar.png"))
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()
+        self.ground_y = 224
         # Set the initial position and velocity
         self.rect.x = 100
         self.rect.y = 300
