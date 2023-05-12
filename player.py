@@ -105,5 +105,8 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.y = 0
                 self.position.y = tile.rect.bottom + self.rect.h
                 self.rect.bottom = self.position.y
-        if len(kills) > 0:
-                pygame.quit
+        for killer in kills:
+            if self.velocity.y > 0:
+                sys.exit()
+            elif self.velocity.y < 0:
+                sys.exit()
