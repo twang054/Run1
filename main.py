@@ -4,7 +4,6 @@ from tiles import *
 from Menu.button import Button
 from player import Player
 from player import death
-from wall import Wall
 from spritesheet import Spritesheet
 from camera import *
 
@@ -59,8 +58,7 @@ def game():
     fps = 60  
     
     pygame.display.set_caption('Run')  
-    image = pygame.image.load("run_background.webp")
-    new_bg = pygame.image.load("level1.4.png").convert()
+    new_bg = pygame.image.load("level_files/level1.4.png").convert()
 
     display_w, display_h = 1000, 800
     canvas = pygame.Surface((display_w, display_w))
