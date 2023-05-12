@@ -42,7 +42,7 @@ def main_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    game('level1.4.csv', "level1.4.png")
+                    game('level_files/level1.4.csv', "level_files/level1.4.png")
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
@@ -56,16 +56,7 @@ def game(csv, png):
     clock = pygame.time.Clock()  
     fps = 60  
     pygame.display.set_caption('Run')  
-<<<<<<< HEAD
-    new_bg = pygame.image.load("level_files/level1.4.png").convert()
-=======
-    image = pygame.image.load("run_background.webp")
     new_bg = pygame.image.load(png).convert()
-<<<<<<< HEAD
->>>>>>> 4bd0b5d632fa339ccf6f39c83ab24db6430483eb
-
-=======
->>>>>>> 421bf7a (Made comments)
     display_w, display_h = 1000, 800
     canvas = pygame.Surface((display_w, display_w))
     screen = pygame.display.set_mode(((display_w, display_h)))
@@ -128,12 +119,12 @@ def game(csv, png):
         clock.tick(fps)
         
         # Level 1 
-        if csv == "level1.4.csv":
+        if csv == "level_files/level1.4.csv":
             # When Player Completes Level 1, Goes to Level 2
             if player.position.x > 3200:
-                game('level2.3.csv',"level2.3.png")
+                game('level_files/level2.3.csv',"level_files/level2.3.png")
         # Level 2
-        elif csv == "level2.3.csv":
+        elif csv == "level_files/level2.3.csv":
             # When Player Completes Level 2
             if player.position.x > 4650:
                 pygame.quit()

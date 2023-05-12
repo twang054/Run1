@@ -61,7 +61,7 @@ class TileMap():
             x = 0
             for tile in row:
                 if tile == '1':
-                    tiles.append(Tile('block.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
+                    tiles.append(Tile('assets/block.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
                 
                 x += 1
             y += 1
@@ -102,9 +102,9 @@ class KillerMap():
             x = 0
             for tile in row:
                 if tile == '3': ## Substitute filenames
-                    killers.append(Killer('hang_spike.png', x * self.killer_size, y * self.killer_size, self.spritesheet))
+                    killers.append(Killer('assets/hang_spike.png', x * self.killer_size, y * self.killer_size, self.spritesheet))
                 elif tile == '4': ## Substitute filenames
-                    killers.append(Killer('spike.png', x * self.killer_size, y * self.killer_size, self.spritesheet))
+                    killers.append(Killer('assets/spike.png', x * self.killer_size, y * self.killer_size, self.spritesheet))
                     
                 x += 1
             y += 1
@@ -146,7 +146,7 @@ class ChainMap():
                 if tile == '0':
                     self.start_x, self.start_y = x * self.chain_size, y * self.chain_size
                 elif tile == '2':
-                    chains.append(Chain('chain.png', x * self.chain_size, y * self.chain_size, self.spritesheet))
+                    chains.append(Chain('assets/chain.png', x * self.chain_size, y * self.chain_size, self.spritesheet))
                 
                 x += 1
             y += 1
