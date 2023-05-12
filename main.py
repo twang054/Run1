@@ -45,13 +45,13 @@ def main_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    game()
+                    game('level1.4.csv', "level1.4.png")
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
         pygame.display.update()
 
-def game():
+def game(csv, png):
     pygame.init()  
 
     # Initializations
@@ -60,7 +60,7 @@ def game():
     
     pygame.display.set_caption('Run')  
     image = pygame.image.load("run_background.webp")
-    new_bg = pygame.image.load("level1.4.png").convert()
+    new_bg = pygame.image.load(png).convert()
 
     display_w, display_h = 1000, 800
     canvas = pygame.Surface((display_w, display_w))
@@ -78,9 +78,9 @@ def game():
     spritesheet = Spritesheet('spritesheet1.png')
 
     # Load Map 
-    map = TileMap('level1.4.csv', spritesheet)
-    map1 = KillerMap('level1.4.csv', spritesheet)
-    map2 = ChainMap('level1.4.csv', spritesheet)
+    map = TileMap(csv, spritesheet)
+    map1 = KillerMap(csv, spritesheet)
+    map2 = ChainMap(csv, spritesheet)
     player.rect.x, player.rect.y = map.start_x, map.start_y
 
 
@@ -123,10 +123,44 @@ def game():
         canvas.blit(new_bg, (0 - camera.offset.x, 0))
         canvas.blit(player.image, (player.rect.x - camera.offset.x, player.rect.y))
         screen.blit(canvas, (0,0))
- 
         pygame.display.update()  
-        clock.tick(fps)  
-    pygame.quit()  
-    sys.exit  
+        clock.tick(fps)
+        
+        if csv == "level1.4.csv":
+            if player.position.x > 3200:
+                game('level2.3.csv',"level2.3.png")
+        elif csv == "level2.3.csv":
+            if player.position.x > 4650:
+                pygame.quit()
+                pygame.init()
+                SCREEN = pygame.display.set_mode((1280, 720))
+                BG = pygame.image.load("assets/Background.png")
+                while True:
+                    SCREEN.blit(BG, (0, 0))
+
+                    MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+                    MENU_TEXT = get_font(80).render("CONGRATULATIONS", True, "#b68f40")
+                    MENU_RECT = MENU_TEXT.get_rect(center=(640, 360))
+                    
+                    QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 550), 
+                                        text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+
+                    SCREEN.blit(MENU_TEXT, MENU_RECT)
+
+                    for button in [QUIT_BUTTON]:
+                        button.changeColor(MENU_MOUSE_POS)
+                        button.update(SCREEN)
+                    
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            sys.exit()
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                                pygame.quit()
+                                sys.exit()
+                    pygame.display.update()
+         
 
 main_menu()

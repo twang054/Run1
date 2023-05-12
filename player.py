@@ -3,7 +3,6 @@ from spritesheet import Spritesheet
 import sys
 from Menu.button import Button
 
-
 spritesheet = Spritesheet('spritesheet1.png')
 horizontal_acceleration = 5
 ground_y = 1440
@@ -55,7 +54,7 @@ class Player(pygame.sprite.Sprite):
         self.position, self.velocity = pygame.math.Vector2(0,0), pygame.math.Vector2(0,0)
         self.acceleration = pygame.math.Vector2(0,self.gravity)
         self.ground_y = 350
-        self.left_border, self.right_border = 250, 4800
+        self.left_border, self.right_border = 250, 4700
 
     
     def draw(self, display):
