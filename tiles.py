@@ -10,6 +10,15 @@ class Tile(pygame.sprite.Sprite):
     def draw(self,surface):
         surface.blit(self.image, (self.rect.x, self.rect.y))
 
+class Killer(pygame.sprite.Sprite):
+    def __init__(self, image,x,y,spritesheet):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(image)
+        self.rect = self.image.get_rect()
+        self.rect.x , self.rect.y = x,y
+    def draw(self, surface):
+        surface.blit(self.image, (self.rect.x, self.rect.y))
+
 class TileMap():
     def __init__(self,filename, spritesheet):
         self.tile_size = 32 ## Size of the tiles
@@ -48,11 +57,50 @@ class TileMap():
                     tiles.append(Tile('block.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
                 elif tile == '2':
                     tiles.append(Tile('chain.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
-                elif tile == '3': ## Substitute filenames
-                    tiles.append(Tile('hang_spike.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
-                elif tile == '4': ## Substitute filenames
-                    tiles.append(Tile('spike.png', x * self.tile_size, y * self.tile_size, self.spritesheet))
                 x += 1
             y += 1
         self.map_w, self.map_h = x * self.tile_size, y * self.tile_size
         return tiles
+    
+
+class KillerMap():
+    def __init__(self,filename, spritesheet):
+        self.killer_size = 32 ## Size of the tiles
+        self.start_x, self.start_y = 0, 0
+        self.spritesheet = spritesheet
+        self.killers = self.load_killers(filename)
+        self.map_surface = pygame.Surface((self.map_w, self.map_h))
+        self.map_surface.set_colorkey((0,0,0))
+        self.load_map()
+    
+    def draw_map(self, surface):
+        surface.blit(self.map_surface, (0,0))
+    
+    def load_map(self):
+        for killer in self.killers:
+            killer.draw(self.map_surface)
+
+    def read_csv(self, filename):
+        map = []
+        with open(os.path.join(filename)) as data:
+            data = csv.reader(data,delimiter=',')
+            for row in data:
+                map.append(list(row))
+            return map
+    
+    def load_killers(self, filename):
+        killers = []
+        map = self.read_csv(filename)
+        x, y = 0,0
+        for row in map:
+            x = 0
+            for tile in row:
+                if tile == '3': ## Substitute filenames
+                    killers.append(Killer('hang_spike.png', x * self.killer_size, y * self.killer_size, self.spritesheet))
+                elif tile == '4': ## Substitute filenames
+                    killers.append(Killer('spike.png', x * self.killer_size, y * self.killer_size, self.spritesheet))
+                    
+                x += 1
+            y += 1
+        self.map_w, self.map_h = x * self.killer_size, y * self.killer_size
+        return killers

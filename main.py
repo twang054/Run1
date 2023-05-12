@@ -57,12 +57,11 @@ def game():
     clock = pygame.time.Clock()  
     fps = 60  
     
-    background = [255, 255, 255]
     pygame.display.set_caption('Run')  
     image = pygame.image.load("run_background.webp")
     new_bg = pygame.image.load("level1.png").convert()
 
-    display_w, display_h = 800, 600
+    display_w, display_h = 1000, 800
     canvas = pygame.Surface((display_w, display_w))
     screen = pygame.display.set_mode(((display_w, display_h)))
     running = True  
@@ -76,14 +75,10 @@ def game():
     camera.setmethod(follow)
 
     spritesheet = Spritesheet('spritesheet1.png')
-    blobby = spritesheet.get_sprite(0,0,64,64)
-    block = spritesheet.get_sprite(64,0,64,64)
-    chain = spritesheet.get_sprite(128,0,64,64)
-    hang_spike = spritesheet.get_sprite(192,0,64,64)
-    spike = spritesheet.get_sprite(256,0,64,64)
 
     # Load Map 
-    map = TileMap('LEVEL1.csv', Spritesheet)
+    map = TileMap('LEVEL1.2.csv', spritesheet)
+    map1 = KillerMap('LEVEL1.2.csv', spritesheet)
     player.rect.x, player.rect.y = map.start_x, map.start_y
 
     # Define keys for player movement  
@@ -119,27 +114,14 @@ def game():
                     if player.is_jumping:
                         player.velocity.y *= .25 # quarters upwards velocity when space is let go
                         player.is_jumping = False
-
-       
         
         # Update Sprite
-        player.update(dt, map.tiles)
+        player.update(dt, map.tiles, map1.killers)
         camera.scroll()
 
         canvas.blit(new_bg, (0 - camera.offset.x, 0))
         canvas.blit(player.image, (player.rect.x - camera.offset.x, player.rect.y))
         screen.blit(canvas, (0,0))
-
-        # Update Screen
-        # canvas.fill(background)
-        # canvas.blit(image,(0, 0))  
-   
-        # player.draw(canvas)
-        
-        # map.draw_map(canvas)
-        # canvas.blit(player.image, player.rect)
-        # screen.blit(canvas, (0 - camera.offset.x, 0))
-
  
         pygame.display.update()  
         clock.tick(fps)  

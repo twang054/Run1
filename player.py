@@ -1,9 +1,10 @@
 import pygame
 from spritesheet import Spritesheet
+import sys
 
 spritesheet = Spritesheet('spritesheet1.png')
 horizontal_acceleration = 5
-ground_y = 600
+ground_y = 1440
 velocity_cap = 15
 class Player(pygame.sprite.Sprite):  
     def __init__(self):  
@@ -23,11 +24,11 @@ class Player(pygame.sprite.Sprite):
     def draw(self, display):
         display.blit(self.image, (self.rect.x, self.rect.y))
     
-    def update(self, dt, tiles):
+    def update(self, dt, tiles, killers):
         self.horizontal_movement(dt)
-        self.checkCollisionsx(tiles)
+        self.checkCollisionsx(tiles, killers)
         self.vertical_movement(dt)
-        self.checkCollisionsy(tiles)
+        self.checkCollisionsy(tiles, killers)
 
     
     def horizontal_movement(self, dt):
@@ -52,7 +53,7 @@ class Player(pygame.sprite.Sprite):
             self.velocity.y = 0
             self.position.y = ground_y
         self.rect.bottom = self.position.y
-    
+
     def jump(self):
         if self.on_ground:
             self.is_jumping = True
@@ -65,9 +66,16 @@ class Player(pygame.sprite.Sprite):
             if self.rect.colliderect(tile):
                 hits.append(tile)
         return hits
+    def get_kills(self, killers):
+        killed = []
+        for killer in killers:
+            if self.rect.colliderect(killer):
+                killed.append(killer)
+        return killed
 
-    def checkCollisionsx(self, tiles):
+    def checkCollisionsx(self, tiles, killers):
         collisions = self.get_hits(tiles)
+        kills = self.get_kills(killers)
         for tile in collisions:
             if self.velocity.x > 0:  # Hit tile moving right
                 self.position.x = tile.rect.left - self.rect.w
@@ -75,11 +83,17 @@ class Player(pygame.sprite.Sprite):
             elif self.velocity.x < 0:  # Hit tile moving left
                 self.position.x = tile.rect.right
                 self.rect.x = self.position.x
+        for killer in kills:
+            if self.velocity.x > 0:
+                sys.exit()
+            elif self.velocity.x < 0:
+                sys.exit()
 
-    def checkCollisionsy(self, tiles):
+    def checkCollisionsy(self, tiles, killers):
         self.on_ground = False
         self.rect.bottom += 1
         collisions = self.get_hits(tiles)
+        kills = self.get_kills(killers)
         for tile in collisions:
             if self.velocity.y > 0:  # Hit tile from the top
                 self.on_ground = True
@@ -91,3 +105,5 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.y = 0
                 self.position.y = tile.rect.bottom + self.rect.h
                 self.rect.bottom = self.position.y
+        if len(kills) > 0:
+                pygame.quit
