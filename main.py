@@ -79,10 +79,9 @@ def game():
     # Load Map 
     map = TileMap('LEVEL1.2.csv', spritesheet)
     map1 = KillerMap('LEVEL1.2.csv', spritesheet)
+    map2 = ChainMap('Level1.2.csv', spritesheet)
     player.rect.x, player.rect.y = map.start_x, map.start_y
 
-    # Define keys for player movement  
-    player.move = [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_SPACE]  
 
     while running:  
         dt = clock.tick(60) * .001 * fps
@@ -116,7 +115,7 @@ def game():
                         player.is_jumping = False
         
         # Update Sprite
-        player.update(dt, map.tiles, map1.killers)
+        player.update(dt, map.tiles, map1.killers, map2.chains)
         camera.scroll()
 
         canvas.blit(new_bg, (0 - camera.offset.x, 0))

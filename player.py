@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
     def draw(self, display):
         display.blit(self.image, (self.rect.x, self.rect.y))
     
-    def update(self, dt, tiles, killers):
+    def update(self, dt, tiles, killers, chains):
         self.horizontal_movement(dt)
         self.checkCollisionsx(tiles, killers)
         self.vertical_movement(dt)
