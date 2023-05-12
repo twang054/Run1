@@ -3,6 +3,7 @@ from spritesheet import Spritesheet
 import sys
 from Menu.button import Button
 
+
 spritesheet = Spritesheet('spritesheet1.png')
 horizontal_acceleration = 5
 ground_y = 1440
@@ -14,7 +15,6 @@ def get_font(size): # Returns Press-Start-2P in the desired size
 def death():
     pygame.init()
     SCREEN = pygame.display.set_mode((1280, 720))
-    pygame.display.set_caption("RUN!")
     BG = pygame.image.load("assets/Background.png")
     while True:
         SCREEN.blit(BG, (0, 0))
@@ -24,8 +24,6 @@ def death():
         MENU_TEXT = get_font(100).render("GAME OVER", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
         
-        RETRY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 300), 
-                            text_input="RETRY?", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
         QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 500), 
                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
@@ -40,9 +38,6 @@ def death():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if RETRY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    pygame.quit()
-                    exec('main.py')
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
