@@ -3,6 +3,7 @@ import sys
 from tiles import *
 from Menu.button import Button
 from player import Player
+from player import death
 from wall import Wall
 from spritesheet import Spritesheet
 from camera import *
@@ -113,7 +114,8 @@ def game():
                     if player.is_jumping:
                         player.velocity.y *= .25 # quarters upwards velocity when space is let go
                         player.is_jumping = False
-        
+        if player.position.y > 850:
+            death()   
         # Update Sprite
         player.update(dt, map.tiles, map1.killers, map2.chains)
         camera.scroll()
