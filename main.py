@@ -5,6 +5,7 @@ from Menu.button import Button
 from player import Player
 from wall import Wall
 from spritesheet import Spritesheet
+from camera import *
 
 pygame.init()
 
@@ -51,7 +52,7 @@ def main_menu():
 
 def game():
     pygame.init()  
-
+    game_over = False
     # Initializations
     clock = pygame.time.Clock()  
     fps = 60  
@@ -59,14 +60,21 @@ def game():
     background = [255, 255, 255]
     pygame.display.set_caption('Run')  
     image = pygame.image.load("run_background.webp")
-    
-    display_w, display_h = 1280, 800
+    new_bg = pygame.image.load("level1.png").convert()
+
+    display_w, display_h = 800, 600
     canvas = pygame.Surface((display_w, display_w))
     screen = pygame.display.set_mode(((display_w, display_h)))
     running = True  
 
     # Load Player and Spritesheet
     player = Player()
+    camera = Camera(player)
+    follow = Follow(camera, player)
+    border = Border(camera, player)
+    auto = Auto(camera, player)
+    camera.setmethod(follow)
+
     spritesheet = Spritesheet('spritesheet1.png')
     blobby = spritesheet.get_sprite(0,0,64,64)
     block = spritesheet.get_sprite(64,0,64,64)
@@ -96,6 +104,12 @@ def game():
                     player.RIGHT_KEY = True
                 elif event.key == pygame.K_SPACE:
                     player.jump()
+                elif event.key == pygame.K_1:
+                    camera.setmethod(follow)
+                elif event.key == pygame.K_2:
+                    camera.setmethod(auto)
+                elif event.key == pygame.K_3:
+                    camera.setmethod(border)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
                     player.LEFT_KEY = False
@@ -105,19 +119,24 @@ def game():
                     if player.is_jumping:
                         player.velocity.y *= .25 # quarters upwards velocity when space is let go
                         player.is_jumping = False
-
+        if not game_over:       
         # Update Sprite
-        player.update(dt)
+            player.update(dt, map.tiles)
+            camera.scroll()
 
-        # Update Screen
-        canvas.fill(background)
-        canvas.blit(image,(0, 0))  
-        
-        player.draw(canvas)
-        
-        map.draw_map(canvas)
-        canvas.blit(player.image, player.rect)
+        canvas.blit(new_bg, (0 - camera.offset.x, 0 - camera.offset.y))
+        canvas.blit(player.image, (player.rect.x - camera.offset.x, player.rect.y - camera.offset.y))
         screen.blit(canvas, (0,0))
+        
+        # Update Screen
+        # canvas.fill(background)
+        # canvas.blit(image,(0, 0))  
+   
+        # player.draw(canvas)
+        
+        # map.draw_map(canvas)
+        # canvas.blit(player.image, player.rect)
+        # screen.blit(canvas, (0 - camera.offset.x, 0))
 
  
         pygame.display.update()  
