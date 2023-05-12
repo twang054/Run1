@@ -16,8 +16,8 @@ class Player(pygame.sprite.Sprite):
         self.gravity, self.friction = 1, -.5
         self.position, self.velocity = pygame.math.Vector2(0,0), pygame.math.Vector2(0,0)
         self.acceleration = pygame.math.Vector2(0,self.gravity)
-        self.ground_y = 400
-        self.left_border, self.right_border = 250, 11500
+        self.ground_y = 350
+        self.left_border, self.right_border = 250, 5500
 
     
     def draw(self, display):
