@@ -1,37 +1,40 @@
+# Import Necessary Modules
 import pygame
-from spritesheet import Spritesheet
 import sys
+from spritesheet import Spritesheet
 from Menu.button import Button
 
+# Intialization of Variables
 spritesheet = Spritesheet('spritesheet1.png')
 horizontal_acceleration = 5
 ground_y = 1440
 velocity_cap = 15
 
-def get_font(size): # Returns Press-Start-2P in the desired size
+# Returns the Desired Font & Size
+def get_font(size): 
     return pygame.font.Font("assets/font.ttf", size)
 
+# When a Player Dies
 def death():
     pygame.init()
     SCREEN = pygame.display.set_mode((1280, 720))
     BG = pygame.image.load("assets/Background.png")
     while True:
+
+        #Creates the Death Screen
         SCREEN.blit(BG, (0, 0))
-
         MENU_MOUSE_POS = pygame.mouse.get_pos()
-
         MENU_TEXT = get_font(100).render("GAME OVER", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
-        
-        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 500), 
-                            text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-
+        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 500), text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
         SCREEN.blit(MENU_TEXT, MENU_RECT)
 
+        # Button Changes Color When Mouse Hovers
         for button in [QUIT_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
         
+        # For Interactions w/ the Death Screen
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -40,9 +43,12 @@ def death():
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
+
         pygame.display.update()
 
+# Creates the Main Player
 class Player(pygame.sprite.Sprite):  
+    # Initialization
     def __init__(self):  
         pygame.sprite.Sprite.__init__(self)  
         self.image = spritesheet.get_sprite(0,0,64,64)
@@ -56,17 +62,18 @@ class Player(pygame.sprite.Sprite):
         self.ground_y = 350
         self.left_border, self.right_border = 250, 4700
 
-    
+    # Draws the Player
     def draw(self, display):
         display.blit(self.image, (self.rect.x, self.rect.y))
     
+    # Updates the Player's Position
     def update(self, dt, tiles, killers, chains):
         self.horizontal_movement(dt)
         self.checkCollisionsx(tiles, killers)
         self.vertical_movement(dt)
         self.checkCollisionsy(tiles, killers)
 
-    
+    # Defines Horizontal Movement
     def horizontal_movement(self, dt):
         self.acceleration.x = 0
         if self.LEFT_KEY:
@@ -77,9 +84,12 @@ class Player(pygame.sprite.Sprite):
         self.velocity.x += self.acceleration.x * dt
         self.position.x += self.velocity.x * dt + (self.acceleration.x * .5) * (dt * dt)
         self.rect.x = self.position.x
+        
+        # Prevents the Player from Going Off Screen
         if self.rect.x < 0:
             self.rect.x = 0
 
+    # Defines Vertical Movement 
     def vertical_movement(self,dt):
         self.velocity.y += self.acceleration.y * dt
         if self.velocity.y > velocity_cap: self.velocity.y = velocity_cap
@@ -90,25 +100,30 @@ class Player(pygame.sprite.Sprite):
             self.position.y = ground_y
         self.rect.bottom = self.position.y
 
+    # Defines Jumping Motion
     def jump(self):
         if self.on_ground:
             self.is_jumping = True
             self.velocity.y -= 20
             self.on_ground = False
 
-    def get_hits(self, tiles):
-        hits = []
-        for tile in tiles:
-            if self.rect.colliderect(tile):
-                hits.append(tile)
-        return hits
+    
     def get_kills(self, killers):
         killed = []
         for killer in killers:
             if self.rect.colliderect(killer):
                 killed.append(killer)
         return killed
-
+    
+    # Collects the collisions of the player and tiles
+    def get_hits(self, tiles):
+        hits = []
+        for tile in tiles:
+            if self.rect.colliderect(tile):
+                hits.append(tile)
+        return hits
+    
+    # Determines the nature of the collisions in the x-direction
     def checkCollisionsx(self, tiles, killers):
         collisions = self.get_hits(tiles)
         kills = self.get_kills(killers)
@@ -119,12 +134,14 @@ class Player(pygame.sprite.Sprite):
             elif self.velocity.x < 0:  # Hit tile moving left
                 self.position.x = tile.rect.right
                 self.rect.x = self.position.x
+        # When the Player Dies
         for killer in kills:
             if self.velocity.x > 0:
                 death()
             elif self.velocity.x < 0:
                 death()
-                
+    
+    # Determines the nature of the collisions in the y-direction         
     def checkCollisionsy(self, tiles, killers):
         self.on_ground = False
         self.rect.bottom += 1
@@ -141,6 +158,7 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.y = 0
                 self.position.y = tile.rect.bottom + self.rect.h
                 self.rect.bottom = self.position.y
+        # When the Player Dies
         for killer in kills:
             if self.velocity.y > 0:
                 death()
