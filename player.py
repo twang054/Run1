@@ -23,7 +23,9 @@ def death():
 
         MENU_TEXT = get_font(100).render("GAME OVER", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
-
+        
+        RETRY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 300), 
+                            text_input="RETRY?", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
         QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 500), 
                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
@@ -38,6 +40,9 @@ def death():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if RETRY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    pygame.quit()
+                    exec('main.py')
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
@@ -55,7 +60,7 @@ class Player(pygame.sprite.Sprite):
         self.position, self.velocity = pygame.math.Vector2(0,0), pygame.math.Vector2(0,0)
         self.acceleration = pygame.math.Vector2(0,self.gravity)
         self.ground_y = 350
-        self.left_border, self.right_border = 250, 5500
+        self.left_border, self.right_border = 250, 4800
 
     
     def draw(self, display):
