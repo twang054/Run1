@@ -50,7 +50,7 @@ def main_menu():
         pygame.display.update()
 
 # Starts the Game
-def game(csv, png):
+def game(csv, png): #takes inputs of two file names in order to call back for different levels
     # Initializations
     pygame.init()  
     clock = pygame.time.Clock()  
@@ -66,37 +66,38 @@ def game(csv, png):
     player = Player()
     camera = Camera(player)
     follow = Follow(camera, player)
-    border = Border(camera, player)
     auto = Auto(camera, player)
     camera.setmethod(follow)
     spritesheet = Spritesheet('spritesheet1.png')
 
-    # Loads TileMap 
+    # Loads Each Sprite Map and sets the player's spawn to (0,0) 
     map = TileMap(csv, spritesheet)
     map1 = KillerMap(csv, spritesheet)
     map2 = ChainMap(csv, spritesheet)
     player.rect.x, player.rect.y = map.start_x, map.start_y
 
-    # Player Interactions
+    # Game Loop
     while running:  
-        dt = clock.tick(60) * .001 * fps
+        dt = clock.tick(60) * .001 * fps # delta time for physics purposes
         
         # Player Inputs
         for event in pygame.event.get():  # Allows quitting with the red button
             if event.type == pygame.QUIT:  
                 running = False 
-                # Horizontal Movement
+                # Movement
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     player.LEFT_KEY = True
                 elif event.key == pygame.K_RIGHT:
                     player.RIGHT_KEY = True
+                # Jumping
                 elif event.key == pygame.K_SPACE or event.key == pygame.K_UP:
                     player.jump()
                 elif event.key == pygame.K_1:
                     camera.setmethod(follow)
                 elif event.key == pygame.K_2:
                     camera.setmethod(auto)
+            # Actions when the player releases the key
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
                     player.LEFT_KEY = False
@@ -106,6 +107,7 @@ def game(csv, png):
                     if player.is_jumping:
                         player.velocity.y *= .25 # quarters upwards velocity when space is let go
                         player.is_jumping = False
+        # If the player falls off the stage, and screen, it dies, and the game over screen is displayed
         if player.position.y > 850:
             death()   
         
@@ -118,7 +120,7 @@ def game(csv, png):
         pygame.display.update()  
         clock.tick(fps)
         
-        # Level 1 
+        # Level 1 (levels are of different tile lengths)
         if csv == "level_files/level1.4.csv":
             # When Player Completes Level 1, Goes to Level 2
             if player.position.x > 3200:

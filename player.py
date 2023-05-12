@@ -46,14 +46,16 @@ def death():
 
         pygame.display.update()
 
-# Creates the Main Player
+# Creates the Main Player Class
 class Player(pygame.sprite.Sprite):  
-    # Initialization
+    # Initialization 
     def __init__(self):  
         pygame.sprite.Sprite.__init__(self)  
-        self.image = spritesheet.get_sprite(0,0,64,64)
-        self.image = pygame.transform.scale(self.image, (25,25))
-        self.rect = self.image.get_rect()
+        self.image = spritesheet.get_sprite(0,0,64,64) # Creates sprite image
+        self.image = pygame.transform.scale(self.image, (25,25)) # Scales to appropriate size
+        self.rect = self.image.get_rect() # Gives player rect. properties
+        
+        # Physics parameters
         self.LEFT_KEY, self.RIGHT_KEY= False, False
         self.is_jumping, self.on_ground, self.friction = False, True, False
         self.gravity, self.friction = 1, -.5
@@ -66,7 +68,7 @@ class Player(pygame.sprite.Sprite):
     def draw(self, display):
         display.blit(self.image, (self.rect.x, self.rect.y))
     
-    # Updates the Player's Position
+    # Updates the Player's Position and updates collision information
     def update(self, dt, tiles, killers, chains):
         self.horizontal_movement(dt)
         self.checkCollisionsx(tiles, killers)
@@ -107,7 +109,9 @@ class Player(pygame.sprite.Sprite):
             self.velocity.y -= 20
             self.on_ground = False
 
-    
+    # Collects the collisions of the player and blocks that kill.
+    # Notably there is no get_ interaction for chains because we want there to
+    # be no collision.
     def get_kills(self, killers):
         killed = []
         for killer in killers:
@@ -134,7 +138,7 @@ class Player(pygame.sprite.Sprite):
             elif self.velocity.x < 0:  # Hit tile moving left
                 self.position.x = tile.rect.right
                 self.rect.x = self.position.x
-        # When the Player Dies
+        # When the Player collides with a killing object, it kills the player
         for killer in kills:
             if self.velocity.x > 0:
                 death()
@@ -158,7 +162,7 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.y = 0
                 self.position.y = tile.rect.bottom + self.rect.h
                 self.rect.bottom = self.position.y
-        # When the Player Dies
+        # Player collides with killing object, player dies
         for killer in kills:
             if self.velocity.y > 0:
                 death()
